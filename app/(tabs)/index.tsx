@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+
 
 type RootStackParamList = {
   Login: undefined;
@@ -15,27 +18,34 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [password, setPassword] = useState<string>('');
 
   const handleLogin = () => {
-    // TODO: Call API, validate and store token
     navigation.navigate('Home');
   };
 
   return (
     <View style={styles.container}>
-      <TextInput
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        placeholderTextColor="#999"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        placeholderTextColor="#999"
-        secureTextEntry
-        style={styles.input}
-      />
+      <View style={styles.inputWrapper}>
+        <FontAwesome name="user" size={20} color="#2577A7" style={styles.icon} />
+        <TextInput
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+          placeholderTextColor="#999"
+          style={styles.input}
+        />
+      </View>
+
+      <View style={styles.inputWrapper}>
+        <FontAwesome name="lock" size={20} color="#2577A7" style={styles.icon} />
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          placeholderTextColor="#999"
+          secureTextEntry
+          style={styles.input}
+        />
+      </View>
+
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
@@ -52,11 +62,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     backgroundColor: '#fff',
   },
-  input: {
-    height: 50,
-    borderBottomWidth: 1,
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
     marginBottom: 25,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    height: 50,
     fontSize: 16,
     color: '#333',
   },
@@ -72,3 +90,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+// This code defines a simple login screen using React Native and TypeScript.
