@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import api from '@/utils/api';
+
+
 
 interface Contact {
   id: number;
@@ -34,6 +38,14 @@ const HomeScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+               
+        <TouchableOpacity style={styles.hamburger} onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+          <MaterialIcons name="menu" size={28} color="#fff" />
+        </TouchableOpacity>
+        <View style={{ width: 28 }} />
+      </View>
+
       <Text style={styles.title}>Add Contacts</Text>
 
       <View style={styles.iconRow}>
@@ -75,9 +87,12 @@ const HomeScreen: React.FC = () => {
         />
       )}
 
-      <TouchableOpacity style={styles.refreshButton} onPress={fetchContacts}>
-        <Text style={styles.refreshText}>Refresh Contacts</Text>
-      </TouchableOpacity>
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.refreshIcon} onPress={fetchContacts}>
+          <MaterialIcons name="contacts" size={28} color="#fff" />
+        </TouchableOpacity>
+          <Text style={styles.refreshText}>Refresh Contact</Text>
+      </View>
     </View>
   );
 };
@@ -85,6 +100,25 @@ const HomeScreen: React.FC = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  header: {
+    backgroundColor: '#2577A7',
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    width: '125%',
+    right: -0,
+    left: -20,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    elevation: 4,
+  },
+
+  hamburger: {
+    paddingRight: 20,
+  },
+  
   container: {
     flex: 1,
     padding: 20,
@@ -142,6 +176,24 @@ const styles = StyleSheet.create({
   },
   refreshText: {
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: 'bold',
+  },
+
+  footer: {    
+    height: 100,
+    width: '120%',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,    
+    backgroundColor: '#2577A7',
+    padding: 20,
+    elevation: 5,
+  },
+  
+  refreshIcon: {    
+    backgroundColor: '#2577A7',
+    padding: 15,
+    
   },
 });

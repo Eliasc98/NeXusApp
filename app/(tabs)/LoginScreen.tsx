@@ -19,9 +19,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-
-  
+  const [password, setPassword] = useState<string>('');  
 
   const router = useRouter();
 
@@ -29,7 +27,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
     try {
     //   const res = await api.post('/login', { username, password });
     //   await AsyncStorage.setItem('token', res.data.token);
-      router.replace('../index');
+      router.replace('./index');
     } catch (e) {
       alert('Login failed');
     }
@@ -59,8 +57,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           style={styles.input}
         />
       </View>
-
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+      <TouchableOpacity style={styles.loginButton} onPress={() => router.replace('/')}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
     </View>
