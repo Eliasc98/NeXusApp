@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { FontAwesome } from '@expo/vector-icons';
 
 type RootStackParamList = {
   Login: undefined;
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginText: {
-    color: '#fff',
+    color: '#2577a7',
     fontWeight: 'bold',
     fontSize: 16,
   },
