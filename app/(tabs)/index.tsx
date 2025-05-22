@@ -1,93 +1,41 @@
-// screens/LoginScreen.tsx
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { FontAwesome } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
+import LoginScreen from '@/components/screens/LoginScreen';
+import HomeScreen from '@/components/screens/HomeScreen';
+import ProfileScreen from '@/components/screens/ProfileScreen';
+import LogoutConfirmScreen from '@/components/screens/LogoutConfirmScreen';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Login: undefined;
-  Home: undefined;
+  MainApp: undefined;
+  LogoutConfirm: undefined;
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
-const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
 
-  const handleLogin = () => {
-    navigation.navigate('Home');
-  };
+const Stack = createNativeStackNavigator<RootStackParamList>();
+const Drawer = createDrawerNavigator();
 
+const DrawerNavigator = () => (
+  <Drawer.Navigator screenOptions={{ headerShown: true }}>
+    <Drawer.Screen name="Home" component={HomeScreen} />
+    <Drawer.Screen name="My Profile" component={ProfileScreen} />
+    <Drawer.Screen name="Logout" component={LogoutConfirmScreen} />
+  </Drawer.Navigator>
+);
+
+export default function App() {
   return (
-    <View style={styles.container}>
-      <View style={styles.inputWrapper}>
-        <FontAwesome name="user" size={20} color="#2577A7" style={styles.icon} />
-        <TextInput
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
-          placeholderTextColor="#999"
-          style={styles.input}
-        />
-      </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="MainApp" component={DrawerNavigator} />
+        <Stack.Screen name="LogoutConfirm" component={LogoutConfirmScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
 
-      <View style={styles.inputWrapper}>
-        <FontAwesome name="lock" size={20} color="#2577A7" style={styles.icon} />
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          placeholderTextColor="#999"
-          secureTextEntry
-          style={styles.input}
-        />
-      </View>
-
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity>
-    </View>
   );
-};
-
-export default LoginScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 30,
-    backgroundColor: '#fff',
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
-    marginBottom: 25,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  input: {
-    flex: 1,
-    height: 50,
-    fontSize: 16,
-    color: '#333',
-  },
-  loginButton: {
-    backgroundColor: '#2577A7',
-    paddingVertical: 15,
-    borderRadius: 4,
-    alignItems: 'center',
-  },
-  loginText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});
-// This code defines a simple login screen using React Native and TypeScript.
+}

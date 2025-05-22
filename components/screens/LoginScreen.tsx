@@ -4,11 +4,14 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-nativ
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from '@/utils/api';
+
 
 
 type RootStackParamList = {
   Login: undefined;
-  Home: undefined;
+  MainApp: undefined;
 };
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
@@ -17,8 +20,16 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const handleLogin = () => {
-    navigation.navigate('Home');
+  
+
+  const handleLogin = async () => {
+    try {
+      const res = await api.post('/login', { username, password });
+      await AsyncStorage.setItem('token', res.data.token);
+      navigation.replace('MainApp');
+    } catch (err) {
+      alert('Invalid login');
+    }
   };
 
   return (
