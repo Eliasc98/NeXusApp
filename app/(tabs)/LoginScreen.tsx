@@ -1,4 +1,5 @@
 // screens/LoginScreen.tsx
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -22,13 +23,15 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   
 
+  const router = useRouter();
+
   const handleLogin = async () => {
     try {
-      const res = await api.post('/login', { username, password });
-      await AsyncStorage.setItem('token', res.data.token);
-      navigation.replace('MainApp');
-    } catch (err) {
-      alert('Invalid login');
+    //   const res = await api.post('/login', { username, password });
+    //   await AsyncStorage.setItem('token', res.data.token);
+      router.replace('../index');
+    } catch (e) {
+      alert('Login failed');
     }
   };
 

@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { router } from 'expo-router';
 
 type RootStackParamList = {
   Login: undefined;
@@ -13,7 +14,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'LogoutConfirm'>;
 const LogoutConfirmScreen: React.FC<Props> = ({ navigation }) => {
   const handleYes = () => {
     // TODO: Clear auth state or token
-    navigation.replace('Login');
+    router.replace('../Login');
   };
 
   return (
@@ -23,7 +24,7 @@ const LogoutConfirmScreen: React.FC<Props> = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={handleYes}>
           <Text style={styles.buttonText}>Yes</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.button} onPress={() => router.replace('../HomeScreen')}>
           <Text style={styles.buttonText}>Cancel</Text>
         </TouchableOpacity>
       </View>
