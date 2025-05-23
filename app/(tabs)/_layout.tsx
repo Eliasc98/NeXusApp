@@ -16,7 +16,12 @@ export default function Layout() {
       drawerContent={(props) => <CustomDrawer {...props} />}
       screenOptions={{
         headerShown: false,
-        drawerType: 'slide',
+        drawerType: 'front',
+        drawerStyle: {
+          backgroundColor: '#fff',
+          width: '80%',
+        },
+        drawerPosition: 'right',
         overlayColor: 'transparent',
       }}
     />

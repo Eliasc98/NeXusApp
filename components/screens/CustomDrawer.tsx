@@ -31,7 +31,7 @@ const CustomDrawer = (props: any) => {
             <Text style={styles.menuTitle}>Profile</Text>
           </View>
 
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('../profile')}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('../ProfileScreen')}>
             <FontAwesome name="list-ul" size={16} color="#000" />
             <Text style={styles.menuText}>My Profile</Text>
           </TouchableOpacity>

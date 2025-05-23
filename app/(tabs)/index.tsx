@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, Activity
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
+import { useDrawerStatus } from '@react-navigation/drawer';
+import { BlurView } from 'expo-blur';
 import api from '@/utils/api';
 
 
@@ -36,6 +38,7 @@ const HomeScreen: React.FC = () => {
 
   const filtered = contacts.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
   const navigation = useNavigation();
+  const isDrawerOpen = useDrawerStatus() === 'open';
 
   return (
     <View style={styles.container}>
@@ -105,6 +108,12 @@ const HomeScreen: React.FC = () => {
         </TouchableOpacity>
           <Text style={styles.refreshText}>Refresh Contact</Text>
       </View>
+
+      {isDrawerOpen && (
+        <BlurView intensity={50} tint="dark" style={StyleSheet.absoluteFill}>
+          <View style={styles.overlay} />
+        </BlurView>
+      )}
     </View>
   );
 };
@@ -217,5 +226,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#2577A7',
     padding: 15,
     
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.4)',
   },
 });
