@@ -111,8 +111,7 @@ const styles = StyleSheet.create({
     right: -0,
     left: -20,
     borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    elevation: 4,
+    borderBottomRightRadius: 15    
   },
 
   hamburger: {
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
     right: 0,    
     backgroundColor: '#2577A7',
     padding: 20,
-    elevation: 5,
+    elevation: 2,
   },
   
   refreshIcon: {    

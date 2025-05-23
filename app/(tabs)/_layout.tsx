@@ -27,10 +27,10 @@ export default function TabLayout() {
       }}>
           <Tabs.Screen
         name="LoginScreen"
-        // options={{
-        //   title: 'false',
-        //   tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        // }}
+        options={{
+          title: 'false',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        }}
       />
       <Tabs.Screen
         name="index"
