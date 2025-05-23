@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
@@ -49,15 +49,26 @@ const HomeScreen: React.FC = () => {
       <Text style={styles.title}>Add Contacts</Text>
 
       <View style={styles.iconRow}>
-        <TouchableOpacity style={styles.iconButton}>
-          <FontAwesome name="plus" size={28} color="#fff" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <FontAwesome name="address-book" size={28} color="#fff" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <MaterialIcons name="email" size={28} color="#fff" />
-        </TouchableOpacity>
+        <View style={styles.iconGroup}>
+          <TouchableOpacity style={styles.iconButton}>
+            <FontAwesome name="plus-square-o" size={28} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.iconLabel}>New</Text>
+        </View>
+
+        <View style={styles.iconGroup}>
+          <TouchableOpacity style={styles.iconButton}>
+            <FontAwesome name="address-book" size={28} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.iconLabel}>Phone Book</Text>
+        </View>
+
+        <View style={styles.iconGroup}>
+          <TouchableOpacity style={styles.iconButton}>
+            <MaterialIcons name="email" size={28} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.iconLabel}>Email</Text>
+        </View>
       </View>
 
       <TextInput
@@ -89,7 +100,7 @@ const HomeScreen: React.FC = () => {
 
       <View style={styles.footer}>
         <TouchableOpacity style={styles.refreshIcon} onPress={fetchContacts}>
-          <MaterialIcons name="contacts" size={28} color="#fff" />
+          <MaterialIcons name="account-circle" size={28} color="#fff" />
         </TouchableOpacity>
           <Text style={styles.refreshText}>Refresh Contact</Text>
       </View>
@@ -100,35 +111,47 @@ const HomeScreen: React.FC = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
   header: {
     backgroundColor: '#2577A7',
     paddingTop: 50,
     paddingBottom: 20,
-    paddingHorizontal: 20,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-    width: '125%',
-    right: -0,
-    left: -20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15    
   },
 
   hamburger: {
     paddingRight: 20,
-  },
+    justifyContent: 'center',
+    alignItems: 'center',
+  },  
   
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
   title: {
     color: '#2577A7',
     fontSize: 20,
-    marginBottom: 15,
+    marginBottom: 50,
+    marginTop: 50,
     textAlign: 'center',
   },
+  iconGroup: {
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  
+  iconLabel: {
+    marginTop: 5,
+    fontSize: 12,
+    color: '#333',
+  },
+  
   iconRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
