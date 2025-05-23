@@ -51,21 +51,21 @@ const HomeScreen: React.FC = () => {
       <View style={styles.iconRow}>
         <View style={styles.iconGroup}>
           <TouchableOpacity style={styles.iconButton}>
-            <FontAwesome name="plus-square-o" size={28} color="#fff" />
+            <FontAwesome name="plus-square-o" size={50} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.iconLabel}>New</Text>
         </View>
 
         <View style={styles.iconGroup}>
           <TouchableOpacity style={styles.iconButton}>
-            <FontAwesome name="address-book" size={28} color="#fff" />
+            <FontAwesome name="address-book" size={50} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.iconLabel}>Phone Book</Text>
         </View>
 
         <View style={styles.iconGroup}>
           <TouchableOpacity style={styles.iconButton}>
-            <MaterialIcons name="email" size={28} color="#fff" />
+            <MaterialIcons name="email" size={50} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.iconLabel}>Email</Text>
         </View>
@@ -120,19 +120,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#2577A7',
     paddingTop: 50,
     paddingBottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
+    paddingHorizontal: 20,
+    alignItems: 'flex-end',  
     borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15    
+    borderBottomRightRadius: 15,
   },
-
+  
   hamburger: {
-    paddingRight: 20,
     justifyContent: 'center',
     alignItems: 'center',
-  },  
+  },
+  
   
   title: {
     color: '#2577A7',
@@ -161,6 +159,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2577A7',
     padding: 18,
     borderRadius: 40,
+    width: "100%",
   },
   searchInput: {
     height: 45,
