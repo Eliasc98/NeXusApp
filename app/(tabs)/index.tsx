@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import { useDrawerStatus } from '@react-navigation/drawer';
 import { BlurView } from 'expo-blur';
 import api from '@/utils/api';
@@ -54,14 +54,14 @@ const HomeScreen: React.FC = () => {
 
       <View style={styles.iconRow}>
         <View style={styles.iconGroup}>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={styles.iconButton} onPress={() => router.push('../add-contact')}>
             <FontAwesome name="plus-square-o" size={50} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.iconLabel}>New</Text>
         </View>
 
         <View style={styles.iconGroup}>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={styles.iconButton} onPress={() => router.push('../phone-book')}>
             <FontAwesome name="address-book" size={50} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.iconLabel}>Phone Book</Text>

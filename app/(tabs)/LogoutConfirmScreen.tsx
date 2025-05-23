@@ -14,7 +14,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'LogoutConfirm'>;
 const LogoutConfirmScreen: React.FC<Props> = ({ navigation }) => {
   const handleYes = () => {
     // TODO: Clear auth state or token
-    router.replace('../Login');
+    router.replace('../LoginScreen');
   };
 
   return (
@@ -24,7 +24,7 @@ const LogoutConfirmScreen: React.FC<Props> = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={handleYes}>
           <Text style={styles.buttonText}>Yes</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.replace('../HomeScreen')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.back()}>
           <Text style={styles.buttonText}>Cancel</Text>
         </TouchableOpacity>
       </View>

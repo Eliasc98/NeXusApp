@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import { FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AddContactScreen() {
@@ -27,6 +28,13 @@ export default function AddContactScreen() {
 
   return (
     <View style={styles.container}>
+        <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesome name="angle-left" size={24} color="#a9a9a9" />
+            </TouchableOpacity>
+            <Text style={styles.title}>Add Contact</Text>
+            <View style={{ width: 24 }} />
+        </View>
       <TextInput placeholder="Name" style={styles.input} value={name} onChangeText={setName} />
       <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} />
       <TextInput
@@ -50,6 +58,17 @@ export default function AddContactScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: '#fff' },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  title: {
+    color: '#2577A7',
+    fontSize: 20,
+    fontWeight: '600',
+  },
   input: {
     height: 45,
     borderBottomWidth: 1,

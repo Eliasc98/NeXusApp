@@ -8,9 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const CustomDrawer = (props: any) => {
   const router = useRouter();
 
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('token');
-    router.replace('../login');
+  const handleLogout = () => {
+    router.replace('../LogoutConfirmScreen');
   };
 
   return (
