@@ -1,66 +1,91 @@
 import React from 'react';
-import { router } from 'expo-router';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import { useRouter } from 'expo-router';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CustomDrawer = (props: any) => {
-  const navigation = useNavigation();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('token');
+    router.replace('../login');
+  };
 
   return (
-    <View style={{ flex: 1 }}>
-      <DrawerContentScrollView {...props} contentContainerStyle={{ paddingTop: 0 }}>
-        <View style={styles.profileSection}>
-          <FontAwesome name="user-circle" size={80} color="#2577A7" />
-          <Text style={styles.profileName}>My Profile</Text>
+    <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
+      <View style={styles.container}>
+        {/* Avatar */}
+        <View style={styles.avatarWrapper}>
+          <Image
+            source={require('../../assets/avatar-placeholder.png')}
+            style={styles.avatar}
+          />
         </View>
 
-        <View style={{ flex: 1, paddingHorizontal: 10 }}>
-          <DrawerItemList {...props} />
-        </View>
-      </DrawerContentScrollView>
+        {/* Profile Section */}
+        <View style={styles.menu}>
+          <View style={styles.menuHeader}>
+            <FontAwesome name="lock" size={18} color="#2577A7" />
+            <Text style={styles.menuTitle}>Profile</Text>
+          </View>
 
-      <View style={styles.footer}>
-        <TouchableOpacity
-          onPress={() => router.replace('../LogoutConfirm')}
-          style={styles.logoutBtn}
-        >
-          <MaterialIcons name="logout" size={22} color="#2577A7" />
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('../profile')}>
+            <FontAwesome name="list-ul" size={16} color="#000" />
+            <Text style={styles.menuText}>My Profile</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
+            <MaterialIcons name="power-settings-new" size={18} color="#000" />
+            <Text style={styles.menuText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </DrawerContentScrollView>
   );
 };
 
 export default CustomDrawer;
 
 const styles = StyleSheet.create({
-  profileSection: {
+  container: {
+    flex: 1,
+    paddingTop: 60,
+    paddingHorizontal: 20,
+  },
+  avatarWrapper: {
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 30,
-    backgroundColor: '#f0f4f8',
+    marginBottom: 30,
   },
-  profileName: {
-    marginTop: 8,
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2577A7',
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#ccc',
   },
-  footer: {
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
+  menu: {
+    flex: 1,
   },
-  logoutBtn: {
+  menuHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 10,
   },
-  logoutText: {
-    color: '#2577A7',
+  menuTitle: {
     marginLeft: 10,
+    fontSize: 16,
+    color: '#2577A7',
     fontWeight: '600',
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  menuText: {
+    marginLeft: 10,
+    fontSize: 14,
+    color: '#333',
   },
 });

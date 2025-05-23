@@ -35,6 +35,7 @@ const HomeScreen: React.FC = () => {
   }, []);
 
   const filtered = contacts.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
