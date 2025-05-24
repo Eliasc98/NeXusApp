@@ -10,21 +10,28 @@ export default function AddContactScreen() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const saveContact = async () => {
+    setLoading(true);
     if (!phone.trim()) {
       setError('Phone number is required');
       return;
     }
-
-    const newContact = { id: Date.now(), name, email, phone };
-    const stored = await AsyncStorage.getItem('contacts');
-    const contacts = stored ? JSON.parse(stored) : [];
-    contacts.push(newContact);
-    await AsyncStorage.setItem('contacts', JSON.stringify(contacts));
-    Alert.alert('Contact Saved');
-    router.replace('/'); // go back to Home
+  
+    const newContact = { name, email, phone };
+  
+    try {
+      const response = await api.post('http://127.0.0.1:8000/api/save-contacts', { name, email, phone });      
+      
+      Alert.alert('Contact Saved', `${response.data}`);
+      router.replace('/'); 
+    } catch (e: any) {
+      const errorMessage = e?.response?.data?.message || 'Failed to Save contact';
+      alert(errorMessage);
+    }
+    setLoading(false);
   };
 
   return (

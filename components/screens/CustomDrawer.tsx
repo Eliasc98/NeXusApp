@@ -1,12 +1,32 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { useRouter } from 'expo-router';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import api from '@/utils/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CustomDrawer = (props: any) => {
   const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await api.get('http://127.0.0.1:8000/api/fetch-user');
+        setUser(res.data.data); // assuming structure: { data: { user: {...} } }
+      } catch (error) {
+        console.error('Failed to load user:', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const avatarSource = user?.user_img
+    ? { uri: user.user_img }
+    : require('../../assets/avatar-placeholder.png');
 
   const handleLogout = () => {
     router.replace('../LogoutConfirmScreen');
@@ -18,7 +38,7 @@ const CustomDrawer = (props: any) => {
         {/* Avatar */}
         <View style={styles.avatarWrapper}>
           <Image
-            source={require('../../assets/avatar-placeholder.png')}
+            source={avatarSource}
             style={styles.avatar}
           />
         </View>

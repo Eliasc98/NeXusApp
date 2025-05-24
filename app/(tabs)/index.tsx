@@ -26,7 +26,7 @@ const HomeScreen: React.FC = () => {
     setLoading(true);
     try {
       const response = await api.get('http://127.0.0.1:8000/api/contacts');
-      setContacts(response.data.contacts);
+      setContacts(response.data.data);
     } catch (err) {
       console.error(err);
     }
@@ -42,7 +42,7 @@ const HomeScreen: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await api.get(`http://127.0.0.1:8002/api/contacts/search?q=${text}`);
+      const res = await api.get(`http://127.0.0.1:8000/api/contacts/search?q=${text}`);
       setContacts(res.data.data); // adapt based on your Laravel response
     } catch (err) {
       console.error('Search error:', err);
@@ -51,7 +51,7 @@ const HomeScreen: React.FC = () => {
     setLoading(false);
   };
 
-  const filtered = contacts.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
+  // const filtered = contacts.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
   const navigation = useNavigation();
   const isDrawerOpen = useDrawerStatus() === 'open';
 
@@ -93,21 +93,23 @@ const HomeScreen: React.FC = () => {
       <TextInput
         placeholder="Search Contact"
         value={query}
-        onChangeText={setSearch}
+        onChangeText={(text) => setQuery(text)}
         placeholderTextColor="#666"
         style={styles.searchInput}
       />
 
-      <TouchableOpacity style={styles.searchButton}>
+      <TouchableOpacity style={styles.searchButton} onPress={() => searchContacts(query)}>
         <Text style={styles.searchText}>Search</Text>
       </TouchableOpacity>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#2577A7" />
+       <ActivityIndicator size="large" color="#2577A7" />
+      ) : contacts === null ? (
+        <Text style={styles.noResults}>No results found</Text>
       ) : (
         <FlatList
-          data={filtered}
-          keyExtractor={item => item.id.toString()}
+          data={contacts}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.contactItem}>
               <FontAwesome name="user-circle" size={24} color="#aaa" />
@@ -140,6 +142,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#fff',
+  },
+  noResults: {
+    textAlign: 'center',
+    marginTop: 10,
+    color: '#999',
+    fontSize: 16,
   },
   header: {
     backgroundColor: '#2577A7',

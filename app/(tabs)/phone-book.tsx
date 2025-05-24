@@ -7,12 +7,19 @@ import api from '@/utils/api';
 
 export default function PhoneBookScreen() {
   const [contacts, setContacts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const loadContacts = async () => {
-    const stored = await AsyncStorage.getItem('contacts');
-    const parsed = stored ? JSON.parse(stored) : [];
-    setContacts(parsed);
-  };
+    setLoading(true);
+      try {
+        const response = await api.get('http://127.0.0.1:8000/api/contacts');
+        setContacts(response.data.data);
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
+  };  
+   
 
   useEffect(() => {
     loadContacts();

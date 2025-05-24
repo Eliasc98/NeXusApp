@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
@@ -8,11 +8,44 @@ import api from '@/utils/api';
 export default function ProfileScreen() {
   const [tab, setTab] = useState<'profile' | 'social' | 'links'>('profile');
   const [avatar, setAvatar] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
 
-  const [name, setName] = useState('');
+  const [fullname, setFullname] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+  if (user) {
+    setFullname(user.fullname || '');
+    setUsername(user.username || '');
+    setEmail(user.email || '');
+    setContactNumber(user.contact_number || '');
+  }
+}, [user]);
+  
+
+ 
+  
+    useEffect(() => {
+      const fetchUser = async () => {
+        try {
+          const res = await api.get('http://127.0.0.1:8000/api/fetch-user');
+          setUser(res.data.data); // assuming structure: { data: { user: {...} } }          
+          console.log(res.data.data)
+
+        } catch (error) {
+          console.error('Failed to load user:', error);
+        }
+      };
+  
+      fetchUser();
+    }, []);
+  
+    const avatarSource = user?.user_img
+      ? { uri: user.user_img }
+      : require('../../assets/avatar-placeholder.png');
 
   const router = useRouter();
 
@@ -29,9 +62,9 @@ export default function ProfileScreen() {
 
   const handleSubmit = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!name) newErrors.name = 'is required';
+    if (!fullname) newErrors.name = 'is required';
     if (!email) newErrors.email = 'is required';
-    if (!phone) newErrors.phone = 'is required';
+    if (!contactNumber) newErrors.phone = 'is required';
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       Alert.alert('Success', 'Form submitted!');
@@ -54,7 +87,7 @@ export default function ProfileScreen() {
         <TouchableOpacity onPress={pickImage}>
           <Image
             source={
-              avatar ? { uri: avatar } : require('../../assets/avatar-placeholder.png')
+              avatarSource
             }
             style={styles.avatar}
           />
@@ -87,13 +120,13 @@ export default function ProfileScreen() {
       {/* Tab content */}
       {tab === 'profile' && (
         <>
-          <TextInput placeholder="Full Name" value={name} onChangeText={setName} style={styles.input} />
+          <TextInput placeholder="Fullname" value={fullname} onChangeText={setFullname} style={styles.input} />
           {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
 
           <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" />
           {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
-          <TextInput placeholder="Phone Number" value={phone} onChangeText={setPhone} style={styles.input} keyboardType="phone-pad" />
+          <TextInput placeholder="Phone Number" value={contactNumber} onChangeText={setContactNumber} style={styles.input} keyboardType="phone-pad" />
           {errors.phone && <Text style={styles.errorText}>{errors.phone}</Text>}
         </>
       )}
