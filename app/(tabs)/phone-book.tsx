@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import api from '@/utils/api';
 
 export default function PhoneBookScreen() {
   const [contacts, setContacts] = useState<any[]>([]);

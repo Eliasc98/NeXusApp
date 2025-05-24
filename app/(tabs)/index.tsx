@@ -17,6 +17,7 @@ interface Contact {
 }
 
 const HomeScreen: React.FC = () => {
+  const [query, setQuery] = useState('');
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ const HomeScreen: React.FC = () => {
   const fetchContacts = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/contacts');
+      const response = await api.get('http://127.0.0.1:8000/api/contacts');
       setContacts(response.data.contacts);
     } catch (err) {
       console.error(err);
@@ -35,6 +36,20 @@ const HomeScreen: React.FC = () => {
   useEffect(() => {
     fetchContacts();
   }, []);
+
+  const searchContacts = async (text: string) => {
+    setQuery(text);
+    setLoading(true);
+
+    try {
+      const res = await api.get(`http://127.0.0.1:8002/api/contacts/search?q=${text}`);
+      setContacts(res.data.data); // adapt based on your Laravel response
+    } catch (err) {
+      console.error('Search error:', err);
+    }
+
+    setLoading(false);
+  };
 
   const filtered = contacts.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
   const navigation = useNavigation();
@@ -77,7 +92,7 @@ const HomeScreen: React.FC = () => {
 
       <TextInput
         placeholder="Search Contact"
-        value={search}
+        value={query}
         onChangeText={setSearch}
         placeholderTextColor="#666"
         style={styles.searchInput}

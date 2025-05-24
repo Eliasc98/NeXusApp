@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { router } from 'expo-router';
+import api from '@/utils/api';
 
 type RootStackParamList = {
   Login: undefined;

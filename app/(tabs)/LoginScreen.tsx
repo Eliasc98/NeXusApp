@@ -1,7 +1,7 @@
 // screens/LoginScreen.tsx
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -24,12 +24,21 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const router = useRouter();
 
   const handleLogin = async () => {
+    if (!username || !password) {
+      Alert.alert('Error', 'All fields are required');
+      return;
+    }
     try {
-    //   const res = await api.post('/login', { username, password });
-    //   await AsyncStorage.setItem('token', res.data.token);
-      router.replace('./index');
-    } catch (e) {
-      alert('Login failed');
+      const res = await api.post('http://127.0.0.1:8000/api/login', { username, password });
+
+      const token = res.data.data.token;
+      await AsyncStorage.setItem('token', token);
+
+      Alert.alert('Success', 'Logged in!');
+      router.replace('/');
+    } catch (e: any) {
+      const errorMessage = e?.response?.data?.message || 'Login failed';
+      alert(errorMessage);
     }
   };
 
@@ -57,7 +66,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           style={styles.input}
         />
       </View>
-      <TouchableOpacity style={styles.loginButton} onPress={() => router.replace('/')}>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
     </View>

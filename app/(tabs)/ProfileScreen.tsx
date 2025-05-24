@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert } fro
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
+import api from '@/utils/api';
 
 export default function ProfileScreen() {
   const [tab, setTab] = useState<'profile' | 'social' | 'links'>('profile');
