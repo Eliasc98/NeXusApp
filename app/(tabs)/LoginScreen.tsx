@@ -3,8 +3,7 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { FontAwesome } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '@/utils/api';
 
@@ -29,7 +28,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       return;
     }
     try {
-      const res = await api.post('http://127.0.0.1:8000/api/login', { username, password });
+      const res = await api.post('http://192.168.132.225:8000/api/login', { username, password });
 
       const token = res.data.data.token;
       await AsyncStorage.setItem('token', token);

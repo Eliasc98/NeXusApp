@@ -25,7 +25,7 @@ const HomeScreen: React.FC = () => {
   const fetchContacts = async () => {
     setLoading(true);
     try {
-      const response = await api.get('http://127.0.0.1:8000/api/contacts');
+      const response = await api.get('http://192.168.132.225:8000/api/contacts');
       setContacts(response.data.data);
     } catch (err) {
       console.error(err);
@@ -42,10 +42,16 @@ const HomeScreen: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await api.get(`http://127.0.0.1:8000/api/contacts/search?q=${text}`);
-      setContacts(res.data.data); // adapt based on your Laravel response
-    } catch (err) {
-      console.error('Search error:', err);
+      const res = await api.get(`http://192.168.132.225:8000/api/contacts/search?q=${text}`);
+      setContacts(res.data.data); 
+      console.log('Search results:', res.data.data);
+    } catch (error: any) {
+      console.error('Search error:', error);
+      if (error.response?.status === 401) {
+              console.log('Error', JSON.stringify(error.response.data.errors));
+            } else {
+              console.error('Update error:', error);
+            }
     }
 
     setLoading(false);
@@ -104,7 +110,7 @@ const HomeScreen: React.FC = () => {
 
       {loading ? (
        <ActivityIndicator size="large" color="#2577A7" />
-      ) : contacts === null ? (
+      ) : contacts.length === null ? (
         <Text style={styles.noResults}>No results found</Text>
       ) : (
         <FlatList
@@ -113,7 +119,7 @@ const HomeScreen: React.FC = () => {
           renderItem={({ item }) => (
             <View style={styles.contactItem}>
               <FontAwesome name="user-circle" size={24} color="#aaa" />
-              <Text style={styles.contactText}>{item.name}</Text>
+              <Text style={styles.contactText}>{item.name ?? "No Contact Found"}</Text>
             </View>
           )}
         />

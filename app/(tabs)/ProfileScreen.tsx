@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
+import * as FileSystem from 'expo-file-system';
 import api from '@/utils/api';
 
 export default function ProfileScreen() {
   const [tab, setTab] = useState<'profile' | 'social' | 'links'>('profile');
   const [avatar, setAvatar] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  
 
   const [fullname, setFullname] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [contactNumber, setContactNumber] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  // Socials
+  const [twitter, setTwitter] = useState('');
+  const [instagram, setInstagram] = useState('');
+  const [linkedin, setLinkedin] = useState('');
+
+  // Links
+  const [github, setGithub] = useState('');
+  const [website, setWebsite] = useState('');
+  const [portfolio, setPortfolio] = useState('');
 
   useEffect(() => {
   if (user) {
@@ -22,6 +34,15 @@ export default function ProfileScreen() {
     setUsername(user.username || '');
     setEmail(user.email || '');
     setContactNumber(user.contact_number || '');
+    // Socials
+    setTwitter(user.twitter || '');
+    setInstagram(user.instagram || '');
+    setLinkedin(user.linkedin || '');
+
+    // Links
+    setGithub(user.github || '');
+    setWebsite(user.website || '');
+    setPortfolio(user.portfolio || '');
   }
 }, [user]);
   
@@ -31,8 +52,8 @@ export default function ProfileScreen() {
     useEffect(() => {
       const fetchUser = async () => {
         try {
-          const res = await api.get('http://127.0.0.1:8000/api/fetch-user');
-          setUser(res.data.data); // assuming structure: { data: { user: {...} } }          
+          const res = await api.get('http://192.168.132.225:8000/api/fetch-user');
+          setUser(res.data.data);        
           console.log(res.data.data)
 
         } catch (error) {
@@ -43,33 +64,119 @@ export default function ProfileScreen() {
       fetchUser();
     }, []);
   
-    const avatarSource = user?.user_img
-      ? { uri: user.user_img }
-      : require('../../assets/avatar-placeholder.png');
+    const avatarSource = avatar
+        ? { uri: avatar } 
+        : user?.user_img
+        ? { uri: user.user_img }
+        : require('../../assets/avatar-placeholder.png');
 
   const router = useRouter();
 
+  // const pickImage = async () => {
+  //   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //   if (!permissionResult.granted) {
+  //     alert("Permission to access gallery is required!");
+  //     return;
+  //   }
+    
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     allowsEditing: true,
+  //     aspect: [1, 1],
+  //     quality: 0.7,
+  //   });
+  //   if (!result.canceled) {
+  //     setAvatar(result.assets[0].uri);
+  //   }
+  // };
+
   const pickImage = async () => {
+  if (Platform.OS === 'web') {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = () => {
+      const file = input.files?.[0];
+      if (file) {
+        const webUri = URL.createObjectURL(file);
+        setAvatar(webUri);
+      }
+    };
+    input.click();
+  } else {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert('Permission is required to access gallery!');
+      return;
+    }
+
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [1, 1],
       quality: 0.7,
+      aspect: [1, 1],
     });
+
     if (!result.canceled) {
       setAvatar(result.assets[0].uri);
     }
+  }
+};
+
+
+  const handleSubmits = async () => {
+
+    setLoading(true);
+    const newErrors: { [key: string]: string } = {};
+    if (!fullname) newErrors.fullName = 'is required';
+    if (!email) newErrors.email = 'is required';
+    if (!contactNumber) newErrors.contactNumber = 'is required';
+    setErrors(newErrors);
+    
+    const formData = new FormData();
+  
+    formData.append('fullname', String(fullname));
+    formData.append('username', String(username));
+    formData.append('email', String(email));
+    formData.append('contact_number', String(contactNumber));
+    formData.append('twitter', String(twitter));
+    formData.append('instagram', String(instagram));
+    formData.append('linkedin', String(linkedin));
+
+    formData.append('github', String(github));
+    formData.append('website', String(website));
+    formData.append('portfolio', String(portfolio));    
+    
+
+    console.log( "this is the data: " + fullname, username, email, contactNumber );
+
+  
+    if (avatar) {
+      const base64Img = await FileSystem.readAsStringAsync(avatar, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      
+      formData.append('user_img', base64Img);
+    }
+  
+
+    try {
+      const res = await api.post('http://192.168.132.225:8000/api/update-profile', formData);
+  
+      Alert.alert('Success', res.data.message || 'Profile updated successfully!');
+      console.log(res.data);
+      router.replace('/'); 
+    } catch (error: any) {
+      if (error.response?.status === 422) {
+        console.log('Validation Errors:', error.response.data.errors);
+        Alert.alert('Validation Failed', JSON.stringify(error.response.data.errors));
+      } else {
+        console.error('Update error:', error);
+        Alert.alert('Error', 'Something went wrong');
+      }
+    }
+    setLoading(false);
   };
 
-  const handleSubmit = () => {
-    const newErrors: { [key: string]: string } = {};
-    if (!fullname) newErrors.name = 'is required';
-    if (!email) newErrors.email = 'is required';
-    if (!contactNumber) newErrors.phone = 'is required';
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      Alert.alert('Success', 'Form submitted!');
-    }
-  };
+ 
 
   return (
     <View style={styles.container}>
@@ -133,21 +240,21 @@ export default function ProfileScreen() {
 
       {tab === 'social' && (
         <>
-          <TextInput placeholder="Instagram" style={styles.input} />
-          <TextInput placeholder="Twitter" style={styles.input} />
-          <TextInput placeholder="LinkedIn" style={styles.input} />
+          <TextInput placeholder="Instagram" value={instagram} onChangeText={setInstagram} style={styles.input} />
+          <TextInput placeholder="Twitter" value={twitter} onChangeText={setTwitter} style={styles.input} />
+          <TextInput placeholder="LinkedIn" value={linkedin} onChangeText={setLinkedin} style={styles.input} />
         </>
       )}
 
       {tab === 'links' && (
         <>
-          <TextInput placeholder="Website" style={styles.input} />
-          <TextInput placeholder="Portfolio" style={styles.input} />
-          <TextInput placeholder="GitHub" style={styles.input} />
+          <TextInput placeholder="Website" value={website} onChangeText={setWebsite} style={styles.input} />
+          <TextInput placeholder="Portfolio" value={portfolio} onChangeText={setPortfolio} style={styles.input} />
+          <TextInput placeholder="GitHub" value={github} onChangeText={setGithub} style={styles.input} />
         </>
       )}
 
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+      <TouchableOpacity style={styles.submitButton} onPress={handleSubmits}>
         <Text style={styles.submitText}>Submit</Text>
       </TouchableOpacity>
     </View>
