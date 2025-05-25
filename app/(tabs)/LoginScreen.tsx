@@ -28,7 +28,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       return;
     }
     try {
-      const res = await api.post('http://192.168.132.225:8000/api/login', { username, password });
+      const res = await api.post('http://192.168.153.225:8000/api/login', { username, password });
 
       const token = res.data.data.token;
       await AsyncStorage.setItem('token', token);

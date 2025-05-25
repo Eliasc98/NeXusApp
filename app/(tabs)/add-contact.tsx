@@ -23,7 +23,7 @@ export default function AddContactScreen() {
     const newContact = { name, email, phone };
   
     try {
-      const response = await api.post('http://192.168.132.225:8000/api/save-contacts', { name, email, phone });      
+      const response = await api.post('http://192.168.153.225:8000/api/save-contacts', { name, email, phone });      
       
       Alert.alert('Contact Saved', `${response.data}`);
       router.replace('/'); 
