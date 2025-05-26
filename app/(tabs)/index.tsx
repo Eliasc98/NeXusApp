@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, Activity
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDrawerStatus } from '@react-navigation/drawer';
 import { BlurView } from 'expo-blur';
 import api from '@/utils/api';
@@ -17,6 +18,19 @@ interface Contact {
 }
 
 const HomeScreen: React.FC = () => {
+  useEffect(() => {
+    const checkLogin = async () => {
+      const token = await AsyncStorage.getItem('token');
+
+      if (token) {       
+        router.replace('/');
+      } else {        
+        router.replace('../LoginScreen');
+      }
+    };
+    checkLogin();
+  }, []);
+  
   const [query, setQuery] = useState('');
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [search, setSearch] = useState('');
