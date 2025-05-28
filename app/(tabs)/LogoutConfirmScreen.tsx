@@ -19,17 +19,17 @@ const LogoutConfirmScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.message}>Proceed Sign-out?</Text>
-      <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.button} onPress={handleYes}>
-          <Text style={styles.buttonText}>Yes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.back()}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    // <View style={styles.container}>
+    //   <Text style={styles.message}>Proceed Sign-out?</Text>
+    //   <View style={styles.buttonRow}>
+    //     <TouchableOpacity style={styles.button} onPress={handleYes}>
+    //       <Text style={styles.buttonText}>Yes</Text>
+    //     </TouchableOpacity>
+    //     <TouchableOpacity style={styles.button} onPress={() => router.back()}>
+    //       <Text style={styles.buttonText}>Cancel</Text>
+    //     </TouchableOpacity>
+    //   </View>
+    // </View>
   );
 };
 
