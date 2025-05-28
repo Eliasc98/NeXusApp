@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '@/utils/api';
 
 type RootStackParamList = {
@@ -13,9 +14,8 @@ type RootStackParamList = {
 type Props = NativeStackScreenProps<RootStackParamList, 'LogoutConfirm'>;
 
 const LogoutConfirmScreen: React.FC<Props> = ({ navigation }) => {
-  const handleYes = () => {
-    // TODO: Clear auth state or token
-    
+  const handleYes = async () => {
+    await AsyncStorage.removeItem('token');
     router.replace('../LoginScreen');
   };
 
