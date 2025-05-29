@@ -72,37 +72,10 @@ export default function ProfileScreen() {
 
   const router = useRouter();
 
-  // const pickImage = async () => {
-  //   const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //   if (!permissionResult.granted) {
-  //     alert("Permission to access gallery is required!");
-  //     return;
-  //   }
-    
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     allowsEditing: true,
-  //     aspect: [1, 1],
-  //     quality: 0.7,
-  //   });
-  //   if (!result.canceled) {
-  //     setAvatar(result.assets[0].uri);
-  //   }
-  // };
+
 
   const pickImage = async () => {
-  if (Platform.OS === 'web') {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = () => {
-      const file = input.files?.[0];
-      if (file) {
-        const webUri = URL.createObjectURL(file);
-        setAvatar(webUri);
-      }
-    };
-    input.click();
-  } else {
+  
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert('Permission is required to access gallery!');
@@ -118,7 +91,7 @@ export default function ProfileScreen() {
     if (!result.canceled) {
       setAvatar(result.assets[0].uri);
     }
-  }
+ 
 };
 
 
@@ -150,12 +123,17 @@ export default function ProfileScreen() {
 
   
     if (avatar) {
-      const base64Img = await FileSystem.readAsStringAsync(avatar, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      
-      formData.append('user_img', base64Img);
+      const fileInfo = await FileSystem.getInfoAsync(avatar);
+      const fileUriParts = avatar.split('.');
+      const fileType = fileUriParts[fileUriParts.length - 1];
+    
+      formData.append('user_img', {
+        uri: avatar,
+        name: `profile.${fileType}`,
+        type: `image/${fileType}`,
+      } as any);
     }
+    
   
 
     try {
@@ -175,6 +153,8 @@ export default function ProfileScreen() {
     }
     setLoading(false);
   };
+  
+  
 
  
 

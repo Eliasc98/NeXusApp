@@ -25,7 +25,7 @@ export default function AddContactScreen() {
     try {
       const response = await api.post('http://192.168.67.225:8000/api/save-contacts', { name, email, phone });      
       
-      Alert.alert('Contact Saved', `${response.data}`);
+      Alert.alert('Contact Saved', `${response.data.data.name} has been saved successfully!`);
       router.replace('/'); 
     } catch (e: any) {
       const errorMessage = e?.response?.data?.message || 'Failed to Save contact';
