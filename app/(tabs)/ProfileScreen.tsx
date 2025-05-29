@@ -143,14 +143,14 @@ export default function ProfileScreen() {
       console.log(res.data);
       router.replace('/'); 
     } catch (error: any) {
-      if (error.response?.status === 422) {
-        console.log('Validation Errors:', error.response.data.errors);
-        Alert.alert('Validation Failed', JSON.stringify(error.response.data.errors));
-      } else {
-        console.error('Update error:', error);
-        Alert.alert('Error', 'Something went wrong');
-      }
-    }
+        if (error.response || error.response?.status === 422) {
+          Alert.alert('Server responded:', error.response);
+        } else if (error.request) {
+          console.log('No response received:', error.request);
+        } else {
+          console.log('Error setting up request:', error.message);
+        }
+      }      
     setLoading(false);
   };
   
@@ -251,6 +251,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
+    marginTop: 20,
+    paddingHorizontal: 10,
   },
   title: {
     color: '#2577A7',

@@ -39,7 +39,7 @@ const HomeScreen: React.FC = () => {
   const fetchContacts = async () => {
     setLoading(true);
     try {
-      const response = await api.get('http://192.168.67.225:8000/api/contacts');
+      const response = await api.get('/contacts');
       setContacts(response.data.data);
     } catch (err) {
       console.error(err);
@@ -56,7 +56,7 @@ const HomeScreen: React.FC = () => {
     setLoading(true);
 
     try {
-      const res = await api.get(`http://192.168.67.225:8000/api/contacts/search?q=${text}`);
+      const res = await api.get(`/contacts/search?q=${text}`);
       setContacts(res.data.data); 
       console.log('Search results:', res.data.data);
     } catch (error: any) {
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#2577A7',
-    paddingTop: 50,
+    paddingTop: 40,
     paddingBottom: 20,
     paddingHorizontal: 20,
     alignItems: 'flex-end',  

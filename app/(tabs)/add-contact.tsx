@@ -71,6 +71,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
+    marginTop: 20,
+    paddingHorizontal: 20,
   },
   title: {
     color: '#2577A7',

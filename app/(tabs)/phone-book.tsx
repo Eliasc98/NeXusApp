@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -30,13 +30,14 @@ export default function PhoneBookScreen() {
         <View style={styles.header}>
             <TouchableOpacity onPress={() => router.back()}>
                 <FontAwesome name="angle-left" size={24} color="#a9a9a9" />
-            </TouchableOpacity>            
+            </TouchableOpacity>  
+            <Text style={styles.title}>Saved Contact</Text>          
             <View style={{ width: 24 }} />
         </View>
 
-      <Text style={styles.title}>Saved Contacts</Text>
-
-      {contacts.length === 0 ? (
+      {loading ? (
+             <ActivityIndicator size="large" color="#2577A7" />
+            ) :  contacts.length === 0 ? (
         <Text style={{ color: '#999', marginTop: 20 }}>No contacts found</Text>
       ) : (
         <FlatList
@@ -62,6 +63,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
+    marginTop: 20,
+    paddingHorizontal: 10,
   },
   title: { fontSize: 20, fontWeight: 'bold', color: '#2577A7', marginBottom: 20 },
   card: {
