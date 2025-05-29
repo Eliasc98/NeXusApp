@@ -52,7 +52,7 @@ export default function ProfileScreen() {
     useEffect(() => {
       const fetchUser = async () => {
         try {
-          const res = await api.get('http://192.168.153.225:8000/api/fetch-user');
+          const res = await api.get('http://192.168.67.225:8000/api/fetch-user');
           setUser(res.data.data);        
           console.log(res.data.data)
 
@@ -159,7 +159,7 @@ export default function ProfileScreen() {
   
 
     try {
-      const res = await api.post('http://192.168.153.225:8000/api/update-profile', formData);
+      const res = await api.post('http://192.168.67.225:8000/api/update-profile', formData);
   
       Alert.alert('Success', res.data.message || 'Profile updated successfully!');
       console.log(res.data);

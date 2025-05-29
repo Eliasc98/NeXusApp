@@ -14,7 +14,7 @@ const CustomDrawer = (props: any) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await api.get('http://192.168.153.225:8000/api/fetch-user');
+        const res = await api.get('http://192.168.67.225:8000/api/fetch-user');
         setUser(res.data.data); // assuming structure: { data: { user: {...} } }
       } catch (error) {
         console.error('Failed to load user:', error);

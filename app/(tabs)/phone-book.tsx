@@ -12,7 +12,7 @@ export default function PhoneBookScreen() {
   const loadContacts = async () => {
     setLoading(true);
       try {
-        const response = await api.get('http://192.168.153.225:8000/api/contacts');
+        const response = await api.get('http://192.168.67.225:8000/api/contacts');
         setContacts(response.data.data);
       } catch (err) {
         console.error(err);
