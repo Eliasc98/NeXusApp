@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert, Platform, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
@@ -74,8 +74,7 @@ export default function ProfileScreen() {
 
 
 
-  const pickImage = async () => {
-  
+  const pickImage = async () => {  
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert('Permission is required to access gallery!');
@@ -122,35 +121,26 @@ export default function ProfileScreen() {
     console.log( "this is the data: " + fullname, username, email, contactNumber );
 
   
-    if (avatar) {
-      const fileInfo = await FileSystem.getInfoAsync(avatar);
-      const fileUriParts = avatar.split('.');
-      const fileType = fileUriParts[fileUriParts.length - 1];
-    
-      formData.append('user_img', {
-        uri: avatar,
-        name: `profile.${fileType}`,
-        type: `image/${fileType}`,
-      } as any);
-    }
-    
-  
+    const fileType = avatar.split('.').pop();
+  formData.append('user_img', {
+    uri: avatar,
+    name: `avatar.${fileType}`,
+    type: `image/${fileType}`,
+  } as any); // `as any` needed in TS
 
-    try {
-      const res = await api.post('http://192.168.67.225:8000/api/update-profile', formData);
-  
-      Alert.alert('Success', res.data.message || 'Profile updated successfully!');
-      console.log(res.data);
-      router.replace('/'); 
-    } catch (error: any) {
-        if (error.response || error.response?.status === 422) {
-          Alert.alert('Server responded:', error.response);
-        } else if (error.request) {
-          console.log('No response received:', error.request);
-        } else {
-          console.log('Error setting up request:', error.message);
-        }
-      }      
+  try {
+    const response = await api.post('/update-profile', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    Alert.alert('Success', response.data.message || 'Profile updated successfully!');
+    router.replace('/');
+    fetchUser(); 
+    console.log('✅ Success:', response.data);
+  } catch (error) {
+    console.log('❌ Error uploading profile:', error);
+  }         
     setLoading(false);
   };
   
@@ -234,6 +224,7 @@ export default function ProfileScreen() {
         </>
       )}
 
+      
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmits}>
         <Text style={styles.submitText}>Submit</Text>
       </TouchableOpacity>
@@ -268,6 +259,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 60,
     backgroundColor: '#ddd',
+    resizeMode: 'cover',
   },
   editIcon: {
     position: 'absolute',
