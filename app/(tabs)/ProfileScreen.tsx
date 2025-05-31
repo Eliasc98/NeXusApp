@@ -126,7 +126,7 @@ export default function ProfileScreen() {
     uri: avatar,
     name: `avatar.${fileType}`,
     type: `image/${fileType}`,
-  } as any); // `as any` needed in TS
+  } as any);
 
   try {
     const response = await api.post('/update-profile', formData, {
@@ -135,11 +135,11 @@ export default function ProfileScreen() {
       },
     });
     Alert.alert('Success', response.data.message || 'Profile updated successfully!');
-    router.replace('/');
-    fetchUser(); 
-    console.log('✅ Success:', response.data);
+    router.replace('../ProfileScreen');
+    router.replace('/');    
+    console.log('Success:', response.data);
   } catch (error) {
-    console.log('❌ Error uploading profile:', error);
+    console.log('Error uploading profile:', error);
   }         
     setLoading(false);
   };
