@@ -33,7 +33,6 @@ const HomeScreen: React.FC = () => {
   
   const [query, setQuery] = useState('');
   const [contacts, setContacts] = useState<Contact[]>([]);
-  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
 
   const fetchContacts = async () => {
@@ -71,7 +70,6 @@ const HomeScreen: React.FC = () => {
     setLoading(false);
   };
 
-  // const filtered = contacts.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
   const navigation = useNavigation();
   const isDrawerOpen = useDrawerStatus() === 'open';
 

@@ -109,4 +109,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-// This code defines a simple login screen using React Native and TypeScript.
